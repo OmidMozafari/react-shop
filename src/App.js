@@ -3,7 +3,7 @@ import { useState } from "react";
 export default function App() {
 
   const productItems = [
-    {name : "Iphone 16", price: "$1200"},
+    {name : "Iphone 16", price: "$1200", Image: "./Mobile Photos/ "},
     {name : "Iphone 16 pro", price: "$1400"},
     {name : "Iphone 16 pro max", price: "$1800"},
     {name : "S23 ultra", price: "$1300"},
@@ -14,24 +14,22 @@ export default function App() {
     {name : "Honor 8 lite", price: "$120"},
     {name : "Redmi Note 10+", price: "$180"},
     {name : "Redmi Note 11", price: "$240"},
-    {name : "Galaxy S3+", price: "$70"},
+    {name : "Samsung Galaxy S3+", price: "$70"},
   ]
 
   const [cartItem, setCartItem] = useState([])
 
-  function handleCartItem(e){
-    setCartItem((prev) => [...prev, e.target])
-    console.log(cartItem);
-    
-    
-    
+  function handleCartItem(v){
+    setCartItem((prev) => [...prev, v ])
   }
+
+  
   
 
   return (
     <div className="container">
       <Products productItems = {productItems} handleCartItem = {handleCartItem} />
-      <Cart />
+      <Cart cartItem = {cartItem} />
     </div>
   );
 }
@@ -50,7 +48,7 @@ function Products ({productItems, handleCartItem}){
     return <div className="productList">
       <h3>{v.name}</h3>
       <p>{v.price}</p>
-      <button onClick={handleCartItem}>Add</button>
+      <button onClick={() => handleCartItem(v)}>Add</button>
     </div>
     })}
 
@@ -58,24 +56,27 @@ function Products ({productItems, handleCartItem}){
   </div>
   }
 
-function Cart(){
+function Cart({cartItem}){
 return <div className="cartContainer">
 
   <div className="cartTitle">
     <h1>Cart</h1>
   </div>
 
-  {/* <div className="cartList">
-    <div className="cardListItems">
-      <h4>Shoes</h4>
-      <p>$100</p>
+  <div className="cartList">
+  {cartItem.map(value =>{
+    return  <div className="cardListItems">
+      <h4>{value.name}</h4>
+      <p>{value.price}</p>
       <button>❌</button>
     </div>
+  })
+   
 
 
-  </div> */}
+}</div>
+  </div>
   {/* <Total /> */}
-</div>
 }
 
 function Total(){
