@@ -1,35 +1,41 @@
 import { useState } from "react";
+import { useEffect } from "react";
 
 export default function App() {
 
   const productItems = [
-    {name : "Iphone 16", price: "$1200", Image: "./Mobile Photos/ "},
-    {name : "Iphone 16 pro", price: "$1400"},
-    {name : "Iphone 16 pro max", price: "$1800"},
-    {name : "S23 ultra", price: "$1300"},
-    {name : "S22 ultra", price: "$900"},
-    {name : "Poco F3 Xiaomi", price: "$350"},
-    {name : "Poco X3 Xiaomi", price: "$170"},
-    {name : "Poco X5 Xiaomi", price: "$220"},
-    {name : "Honor 8 lite", price: "$120"},
-    {name : "Redmi Note 10+", price: "$180"},
-    {name : "Redmi Note 11", price: "$240"},
-    {name : "Samsung Galaxy S3+", price: "$70"},
+    {name : "Iphone 16", price: 1200, Image: "./Mobile Photos/ "},
+    {name : "Iphone 16 pro", price: 1400},
+    {name : "Iphone 16 pro max", price: 1800},
+    {name : "S23 ultra", price: 1300},
+    {name : "S22 ultra", price: 900},
+    {name : "Poco F3 Xiaomi", price: 350},
+    {name : "Poco X3 Xiaomi", price: 170},
+    {name : "Poco X5 Xiaomi", price: 220},
+    {name : "Honor 8 lite", price: 120},
+    {name : "Redmi Note 10+", price: 180},
+    {name : "Redmi Note 11", price: 240},
+    {name : "Samsung Galaxy S3+", price: 70},
   ]
 
   const [cartItem, setCartItem] = useState([])
 
   function handleCartItem(v){
     setCartItem((prev) => [...prev, v ])
+    
   }
 
-  
-  
+  function deleteCartItem(index){
+    setCartItem(cartItem.filter((v, i) => index !== i
+    ))
+  }
+
+  const total = cartItem.reduce((acc, v) => acc + v.price, 0);
 
   return (
     <div className="container">
-      <Products productItems = {productItems} handleCartItem = {handleCartItem} />
-      <Cart cartItem = {cartItem} />
+      <Products productItems = {productItems} handleCartItem = {handleCartItem}  />
+      <Cart cartItem = {cartItem} deleteCartItem={deleteCartItem}  total = {total} />
     </div>
   );
 }
@@ -47,7 +53,7 @@ function Products ({productItems, handleCartItem}){
 
     return <div className="productList">
       <h3>{v.name}</h3>
-      <p>{v.price}</p>
+      <p>{`$${v.price}`}</p>
       <button onClick={() => handleCartItem(v)}>Add</button>
     </div>
     })}
@@ -56,7 +62,7 @@ function Products ({productItems, handleCartItem}){
   </div>
   }
 
-function Cart({cartItem}){
+function Cart({cartItem, deleteCartItem, total}){
 return <div className="cartContainer">
 
   <div className="cartTitle">
@@ -64,21 +70,18 @@ return <div className="cartContainer">
   </div>
 
   <div className="cartList">
-  {cartItem.map(value =>{
+  {cartItem.map((value, index) =>{
     return  <div className="cardListItems">
       <h4>{value.name}</h4>
-      <p>{value.price}</p>
-      <button>❌</button>
+      <p>{`$${value.price}`}</p>
+      <button onClick={()=> deleteCartItem(index)}>❌</button>
     </div>
   })
-   
-
-
 }</div>
+<Total total = {total}/> 
   </div>
-  {/* <Total /> */}
 }
 
-function Total(){
-  return <h3 className="total">Total: $1880</h3>
+function Total({total}){
+  return <h3 className="total">{`Total: $${total}`}</h3>
 }
